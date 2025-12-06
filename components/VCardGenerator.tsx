@@ -24,7 +24,7 @@ export default function VCardGenerator() {
 
   const [qrCodeDataUrl, setQrCodeDataUrl] = useState<string>('');
 
-  // Generate QR code whenever form data changes
+  // Generate QR code whenever form data changes (with debounce)
   useEffect(() => {
     const generateQRCode = async () => {
       try {
@@ -47,7 +47,12 @@ export default function VCardGenerator() {
       }
     };
 
-    generateQRCode();
+    // Debounce QR code generation to avoid excessive updates during rapid typing
+    const timeoutId = setTimeout(() => {
+      generateQRCode();
+    }, 300);
+
+    return () => clearTimeout(timeoutId);
   }, [formData]);
 
   const handleInputChange = (

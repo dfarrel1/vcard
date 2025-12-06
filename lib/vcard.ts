@@ -120,8 +120,13 @@ export function buildVCard(data: VCardData): string {
 
 /**
  * Generates a filename for the vCard download
+ * Sanitizes filename to remove invalid characters
  */
 export function generateVCardFilename(data: VCardData): string {
-  const name = `${data.firstName}_${data.lastName}`.trim().replace(/\s+/g, '_').replace(/^_+|_+$/g, '');
+  const name = `${data.firstName}_${data.lastName}`
+    .trim()
+    .replace(/\s+/g, '_')
+    .replace(/[/\\:*?"<>|]/g, '') // Remove invalid filename characters
+    .replace(/^_+|_+$/g, '');
   return name ? `${name}.vcf` : 'contact.vcf';
 }
